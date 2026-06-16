@@ -10,11 +10,13 @@ Skill que deriva **`CHANGES.md`** — el índice operativo de changes de un proy
 
 Lee la base de conocimiento en `knowledge-base/` (el output de `chronicle`) **a través de su índice**, infiere el perfil del sistema y escribe `CHANGES.md` en la raíz del proyecto con:
 
-- **Árbol de dependencias** (ASCII art).
+- **Árbol de dependencias** (ASCII art) — **validado acíclico** antes de escribir (DAG + integridad de IDs).
 - **Gates de paralelismo** con asignación sugerida de agentes.
 - **Camino crítico** — el mínimo irreducible (MVP) para llegar a producción.
 - **Plan de ejecución con N agentes** (tabla para proyectos chicos, cronograma por olas a escala).
-- **Por cada change**: checkbox de estado, scope operacional, dependencias, nivel de governance y los archivos de la KB a leer antes de implementar.
+- **Por cada change**: checkbox de estado, tamaño (S/M/L), scope operacional, dependencias, nivel de governance y los archivos de la KB a leer antes de implementar.
+
+Consciente de **greenfield vs brownfield** (no genera scaffold para un sistema que ya existe), de **monorepos** (varios subsistemas/perfiles) y de **re-runs idempotentes** (no pisa tus `[x]` ni tus ediciones).
 
 Es *fire-and-forget*: sin preguntas, directo al output. El idioma del output coincide con el de la KB.
 
@@ -113,9 +115,10 @@ Para arrancar: /opsx:propose C-01-foundation-setup
 ## Archivos
 
 - `SKILL.md` — contrato de runtime.
-- `assets/kb-input-contract.md` — cómo forkmap lee una KB de chronicle.
-- `assets/profiles-and-dependencies.md` — taxonomía por perfil, reglas de dependencias, governance, escalabilidad.
-- `assets/changes-template.md` — estructura exacta del output + checklist de validación.
+- `assets/kb-input-contract.md` — cómo forkmap lee una KB de chronicle (índice, perfil, modo, cobertura MVP).
+- `assets/profiles-and-dependencies.md` — taxonomía por perfil y modo, monorepo, dependencias, governance, sizing, derivación por fases, escalabilidad.
+- `assets/changes-template.md` — estructura exacta del output + checklist de validación de grafo.
+- `assets/lifecycle.md` — re-runs idempotentes, drift KB↔CHANGES, sync con `openspec/changes/archive/` (carga lazy).
 
 ---
 
