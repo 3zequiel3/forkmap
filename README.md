@@ -2,123 +2,123 @@
 
 > **Repo:** [github.com/3zequiel3/forkmap](https://github.com/3zequiel3/forkmap)
 
-Skill that derives **`CHANGES.md`** — the operational change index of a project — from a structured knowledge base. It's the consumer half of a pair: **[`chronicle`](https://github.com/3zequiel3/chronicle) documents the system, [`forkmap`](https://github.com/3zequiel3/forkmap) turns that documentation into an executable plan.**
+Skill que deriva **`CHANGES.md`** — el índice operativo de changes de un proyecto — a partir de una base de conocimiento estructurada. Es la mitad consumidora de un par: **[`chronicle`](https://github.com/3zequiel3/chronicle) documenta el sistema y [`forkmap`](https://github.com/3zequiel3/forkmap) convierte esa documentación en un plan ejecutable.**
 
 ---
 
-## What it does
+## Qué hace
 
-Reads the knowledge base under `knowledge-base/` (the output of `chronicle`) **through its index**, infers the system profile, and writes `CHANGES.md` at the project root with:
+Lee la base de conocimiento en `knowledge-base/` (el output de `chronicle`) **a través de su índice**, infiere el perfil del sistema y escribe `CHANGES.md` en la raíz del proyecto con:
 
-- **Dependency tree** (ASCII art).
-- **Parallelism gates** with suggested agent assignment.
-- **Critical path** — the irreducible MVP minimum to reach production.
-- **N-agent execution plan** (table for small projects, wave schedule at scale).
-- **Per change**: status checkbox, operational scope, dependencies, governance level, and the KB paths to read before implementing.
+- **Árbol de dependencias** (ASCII art).
+- **Gates de paralelismo** con asignación sugerida de agentes.
+- **Camino crítico** — el mínimo irreducible (MVP) para llegar a producción.
+- **Plan de ejecución con N agentes** (tabla para proyectos chicos, cronograma por olas a escala).
+- **Por cada change**: checkbox de estado, scope operacional, dependencias, nivel de governance y los archivos de la KB a leer antes de implementar.
 
-Fire-and-forget: no questions, straight to output. Output language matches the KB.
-
----
-
-## Why it's not "just a roadmap"
-
-A classic roadmap is informative. `CHANGES.md` is **operational**: it tells you how to parallelize across agents, what the irreducible minimum is if you're short on time, which KB docs an agent must read before proposing each change, and how much human review each one needs.
-
-| Aspect | Simple roadmap | `CHANGES.md` |
-|--------|----------------|--------------|
-| Dependencies | 1-to-1 table | Hierarchical tree + gates |
-| Parallelization | Implicit / none | Explicit, assigned to agents |
-| Priority under time pressure | Hard to infer | Critical path marked (MVP-driven) |
-| KB contract | Implicit | "Read-before" per change, folder-aware |
-| Risk level | Undeclared | Governance: BAJO/MEDIO/ALTO/CRITICO |
-| Scope per change | Descriptive | Operational (models, endpoints, migrations) + KB codes |
-| Progress tracking | No | Checkboxes `[ ]` / `[x]` |
-| Scale | Breaks past ~20 | Promotes detail into `changes/` |
+Es *fire-and-forget*: sin preguntas, directo al output. El idioma del output coincide con el de la KB.
 
 ---
 
-## How it pairs with `chronicle`
+## Por qué no es "solo un roadmap"
 
-[`forkmap`](https://github.com/3zequiel3/forkmap) reads what [`chronicle`](https://github.com/3zequiel3/chronicle) writes — and only that. The contract:
+Un roadmap clásico es informativo. `CHANGES.md` es **operativo**: te dice cómo paralelizar el trabajo entre agentes, cuál es el mínimo irreducible si te falta tiempo, qué docs de la KB tiene que leer un agente antes de proponer cada change y cuánta revisión humana requiere cada uno.
 
-- **Index-driven discovery** — reads `knowledge-base/README.md` to learn which nodes are active and whether each is a **file or a folder**. Never assumes a fixed set of files. Profile-omitted nodes (e.g. no RBAC in a CLI) are respected, not flagged.
-- **Profile-aware** — the KB's `system_type` (web_app, api, cli, mobile, saas_multi_tenant, library_sdk, data_pipeline) reshapes the change taxonomy. A library roadmap is about public API surface and semver; a pipeline follows the DAG.
-- **MVP-driven** — `chronicle`'s `[MVP]` / `[Post-MVP]` tags drive the critical path. This is exactly what those tags were designed for.
-- **Traceable** — Scope and "Read-before" cite `chronicle`'s codes (`US-NNN`, `RN-{DOMAIN}-NN`, `DD-NN`) and real folder-aware paths.
-
-Full contract: [`assets/kb-input-contract.md`](assets/kb-input-contract.md).
+| Aspecto | Roadmap simple | `CHANGES.md` |
+|---------|----------------|--------------|
+| Dependencias | Tabla 1 a 1 | Árbol jerárquico + gates |
+| Paralelización | Implícita / nula | Explícita, asignada a agentes |
+| Prioridad ante poco tiempo | Difícil de inferir | Camino crítico marcado (basado en MVP) |
+| Contrato con la KB | Implícito | "Leer antes" por change, consciente de carpetas |
+| Nivel de riesgo | No declarado | Governance: BAJO/MEDIO/ALTO/CRITICO |
+| Scope por change | Descriptivo | Operacional (modelos, endpoints, migraciones) + códigos de la KB |
+| Tracking de progreso | No | Checkboxes `[ ]` / `[x]` |
+| Escala | Se rompe pasados ~20 | Promueve el detalle a `changes/` |
 
 ---
 
-## Pre-requisites
+## Cómo se empareja con `chronicle`
 
-1. A knowledge base at `knowledge-base/` (root) with an index (`README.md`) and the core nodes. Generate it with [`chronicle`](https://github.com/3zequiel3/chronicle).
-2. OpenSpec initialized:
+[`forkmap`](https://github.com/3zequiel3/forkmap) lee lo que [`chronicle`](https://github.com/3zequiel3/chronicle) escribe — y nada más que eso. El contrato:
+
+- **Descubrimiento por índice** — lee `knowledge-base/README.md` para saber qué nodos están activos y si cada uno es un **archivo o una carpeta**. Nunca asume un set fijo de archivos. Los nodos omitidos por perfil (por ejemplo, sin RBAC en una CLI) se respetan, no se marcan como faltantes.
+- **Consciente del perfil** — el `system_type` de la KB (web_app, api, cli, mobile, saas_multi_tenant, library_sdk, data_pipeline) redefine la taxonomía de changes. El roadmap de una librería gira en torno a la superficie de API pública y el semver; un pipeline sigue el DAG.
+- **Guiado por MVP** — los tags `[MVP]` / `[Post-MVP]` de `chronicle` manejan el camino crítico. Es exactamente para lo que esos tags fueron diseñados.
+- **Trazable** — el Scope y el "Leer antes" citan los códigos de `chronicle` (`US-NNN`, `RN-{DOMINIO}-NN`, `DD-NN`) y paths reales, conscientes de carpetas.
+
+Contrato completo: [`assets/kb-input-contract.md`](assets/kb-input-contract.md).
+
+---
+
+## Pre-requisitos
+
+1. Una base de conocimiento en `knowledge-base/` (raíz) con un índice (`README.md`) y los nodos core. Generala con [`chronicle`](https://github.com/3zequiel3/chronicle).
+2. OpenSpec inicializado:
    ```bash
    npx @fission-ai/openspec@latest init
    ```
 
-If either is missing, the skill tells you and stops **without writing anything**.
+Si falta cualquiera de los dos, la skill te avisa y se detiene **sin escribir nada**.
 
 ---
 
-## Installation
+## Instalación
 
 ```bash
 npx skills add https://github.com/3zequiel3/forkmap
 ```
 
-Pairs with [`chronicle`](https://github.com/3zequiel3/chronicle) — install both for the full document → plan workflow.
+Se empareja con [`chronicle`](https://github.com/3zequiel3/chronicle) — instalá ambas para el flujo completo documentar → planificar.
 
 ---
 
-## Usage
+## Uso
 
 ```
-your-repo/
-├── knowledge-base/      # KB generated by chronicle (with README.md index)
-└── openspec/            # OpenSpec initialized
+tu-repo/
+├── knowledge-base/      # KB generada por chronicle (con índice README.md)
+└── openspec/            # OpenSpec inicializado
 
-Tell the agent:
-"generate the CHANGES.md" / "armá el roadmap de la KB" / "forkmap"
+Le decís al agente:
+"generá el CHANGES.md" / "armá el roadmap de la KB" / "forkmap"
 ```
 
-→ The agent reads the KB through its index and writes `CHANGES.md` at the root (and `changes/` if the project is large).
+→ El agente lee la KB a través de su índice y escribe `CHANGES.md` en la raíz (y `changes/` si el proyecto es grande).
 
 ---
 
-## Scaling
+## Escalabilidad
 
-| Project size | Output |
-|--------------|--------|
-| ≤ 20 changes | Single `CHANGES.md`, full detail inline |
-| > 20 changes | `CHANGES.md` master index + per-phase detail in `changes/FASE-NN-*.md` |
+| Tamaño del proyecto | Output |
+|---------------------|--------|
+| ≤ 20 changes | Un solo `CHANGES.md`, detalle completo inline |
+| > 20 changes | `CHANGES.md` como índice maestro + detalle por fase en `changes/FASE-NN-*.md` |
 
-Same philosophy as `chronicle`'s file↔folder promotion: don't inflate structure for small projects, don't choke on big ones.
+Misma filosofía que la promoción archivo↔carpeta de `chronicle`: no inflar la estructura en proyectos chicos, no ahogarse en los grandes.
 
 ---
 
-## Closing output
+## Output al cerrar
 
 ```
-✅ CHANGES.md created at the root with 10 changes across 4 phases (profile: web_app).
-Critical path: 7 changes (MVP)
-Parallelism gates: 5
-First recommended change: C-01 (foundation-setup)
-To start: /opsx:propose C-01-foundation-setup
+✅ CHANGES.md creado en la raíz con 10 changes en 4 fases (perfil: web_app).
+Camino crítico: 7 changes (MVP)
+Gates de paralelismo: 5
+Primer change recomendado: C-01 (foundation-setup)
+Para arrancar: /opsx:propose C-01-foundation-setup
 ```
 
 ---
 
-## Files
+## Archivos
 
-- `SKILL.md` — runtime contract.
-- `assets/kb-input-contract.md` — how forkmap reads a chronicle KB.
-- `assets/profiles-and-dependencies.md` — profile taxonomy, dependency rules, governance, scaling.
-- `assets/changes-template.md` — exact output structure + validation checklist.
+- `SKILL.md` — contrato de runtime.
+- `assets/kb-input-contract.md` — cómo forkmap lee una KB de chronicle.
+- `assets/profiles-and-dependencies.md` — taxonomía por perfil, reglas de dependencias, governance, escalabilidad.
+- `assets/changes-template.md` — estructura exacta del output + checklist de validación.
 
 ---
 
-## License
+## Licencia
 
 Apache-2.0
